@@ -1,5 +1,23 @@
-var mysql = require("mysql");
-var inquirer = require("inquirer");
+// you can include console.table here w/o attaching it to a variable
+require("console.table");
+const mysql = require("mysql");
+const inquirer = require("inquirer");
+
+//You will need your SQL connection code here
+
+// Function to load the products table from the database and print results to the console
+function loadProducts() {
+    // Selects all of the data from the MySQL products table
+    connection.query("SELECT * FROM products", function(err, res) {
+      if (err) throw err;
+  
+      // Draw the table in the terminal using the response
+      console.table(res);
+    });
+}
+
+loadProducts();
+
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -9,7 +27,7 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "shperuby098",
+  password: "",
   database: "bamazon_db"
 });
 
