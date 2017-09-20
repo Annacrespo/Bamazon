@@ -4,21 +4,6 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 
 //You will need your SQL connection code here
-
-// Function to load the products table from the database and print results to the console
-function loadProducts() {
-    // Selects all of the data from the MySQL products table
-    connection.query("SELECT * FROM products", function(err, res) {
-      if (err) throw err;
-  
-      // Draw the table in the terminal using the response
-      console.table(res);
-    });
-}
-
-loadProducts();
-
-
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -30,12 +15,50 @@ var connection = mysql.createConnection({
   password: "",
   database: "bamazon_db"
 });
+// Function to load the products table from the database and print results to the console
+function loadProducts() {
+    // Selects all of the data from the MySQL products table
+    connection.query("SELECT * FROM products", function(err, res) {
+      if (err) throw err;
+      
+      // Draw the table in the terminal using the response
+      console.table(res);
+      productSearch();
+    });
+    connection.end();
+}
 
-connection.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!")
+loadProducts();
+
+
+function productSearch() {
+  
+  inquirer.prompt([
+    {
+    name: "buy",
+    type: "choices",
+    message: "What is the id of the product you would like to buy?"
+    },
+    {
+    name: "quantity",
+    type: "input",
+    message: "Enter the quantity."
+    }
+  ]).then(function (answers) {
+    console.log("Thank you for your purchase!");
+    //delete quantity from stock_quantity
+    //update the stock quantity This means updating the SQL database to reflect the remaining quantity.
+    //Once the update goes through, show the customer the total cost of their purchase.
+    //if the stock quantity is less than 0 insufficient quantity and ask again
+    //prevent the order from going through error handling if not a number
+  });
+}
+
+// connection.connect(function(err) {
+//   if (err) throw err;
+//   console.log("Connected!");
   // runSearch();
-});
+// });
 
 // function runSearch() {
 //   inquirer
