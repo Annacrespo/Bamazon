@@ -12,53 +12,98 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "",
+  password: "shperuby098",
   database: "bamazon_db"
 });
 // Function to load the products table from the database and print results to the console
 function loadProducts() {
-    // Selects all of the data from the MySQL products table
-    connection.query("SELECT * FROM products", function(err, res) {
-      if (err) throw err;
-      
-      // Draw the table in the terminal using the response
-      console.table(res);
-      productSearch();
-    });
-    connection.end();
+  // Selects all of the data from the MySQL products table
+  connection.query("SELECT * FROM products", function (err, res) {
+    if (err) throw err;
+    // Draw the table in the terminal using the response
+    console.table(res);
+    productSearch();
+  });
+  // connection.end();
 }
 
 loadProducts();
 
-
 function productSearch() {
-  
+
   inquirer.prompt([
     {
-    name: "buy",
-    type: "choices",
-    message: "What is the id of the product you would like to buy?"
+      name: "item_id",
+      type: "choices",
+      message: "What is the id of the product you would like to buy?"
     },
     {
-    name: "quantity",
-    type: "input",
-    message: "Enter the quantity."
+      name: "stock",
+      type: "input",
+      message: "Enter the quantity."
     }
   ]).then(function (answers) {
-    console.log("Thank you for your purchase!");
-    //delete quantity from stock_quantity
-    //update the stock quantity This means updating the SQL database to reflect the remaining quantity.
-    //Once the update goes through, show the customer the total cost of their purchase.
-    //if the stock quantity is less than 0 insufficient quantity and ask again
-    //prevent the order from going through error handling if not a number
-  });
-}
+    // let id = parseInt(answers.item_id);
+    // let qty = parseInt(answers.stock);
 
-// connection.connect(function(err) {
-//   if (err) throw err;
-//   console.log("Connected!");
-  // runSearch();
-// });
+    let id = answers.item_id;
+    let qty = answers.stock;
+    // if (isNaN(id)) {
+    //   console.log("Sorry that's not a number");
+    //   // productSearch();
+    // }
+    // if (isNaN(qty)) {
+    //   console.log("Sorry that's not a number2");
+    // }
+    var query = "SELECT * FROM products WHERE ?";
+   
+      connection.query(query, {item_id: 1010}, function (err, res) {
+        let quantity = res[0].stock_quantity;
+        if (quantity > answers.stock) {
+          quantity = quantity - answers.stock;
+          console.log(quantity);
+        }
+        //  else {
+        //   console.log("Insufficient quantity!");
+        // }
+      })
+    
+      // productSearch();
+      // } else {
+      //   startingQty();
+      // }
+      // function startingQty() {
+      //   // Selects all of the data from the MySQL products table
+      //   connection.query(`SELECT stock_quantity FROM products WHERE item_id = ${id};`, function(err, res) {
+      //     if (err) throw err;
+      //     console.log(res);
+      //   });
+      // connection.end();
+      // }
+
+
+      //.then function concatenate id and update from mysql workbench
+
+      //get quantity where item_id is equal to user input id
+
+
+      // console.log(id);
+
+      console.log("Thank you for your purchase! Your total comes to...");
+      //prevent the order from going through error handling if not a number
+      //if the stock quantity is less than 0 insufficient quantity and ask again
+
+      //update the stock quantity This means updating the SQL database to reflect the remaining quantity.
+      //delete quantity from stock_quantity
+
+      //Once the update goes through, show the customer the total cost of their purchase.
+
+
+
+
+    
+  })
+}
 
 // function runSearch() {
 //   inquirer
@@ -192,3 +237,7 @@ function productSearch() {
 //       });
 //     });
 // }
+
+
+
+
