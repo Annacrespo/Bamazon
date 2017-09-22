@@ -1,6 +1,6 @@
-#Bamazon App! 
+# Bamazon App! 
 ## Overview
-A command line interface Amazon-like storefront app that uses node and MySQL workbench. The app will take in orders from customers and deplete stock from the store's inventory. 
+**A command line interface Amazon-like storefront app that uses _node_ and _MySQL workbench_. The app will take in orders from customers and deplete stock from the store's inventory.**
 
 The app will prompt users with two messages.
 The first should ask them the ID of the product they would like to buy.
