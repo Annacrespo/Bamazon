@@ -1,9 +1,9 @@
-// you can include console.table here w/o attaching it to a variable
+//console.table here w/o attaching it to a variable
 require("console.table");
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 var query = "SELECT * FROM products WHERE ?";
-//You will need your SQL connection code here
+//SQL connection code here
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -22,21 +22,33 @@ function loadProducts() {
     productSearch();
   });
 }
-
+//loads product table
 loadProducts();
-
 function productSearch() {
-
   inquirer.prompt([
     {
       name: "item_id",
       type: "choices",
-      message: "What is the id of the product you would like to buy?"
+      message: "Welcome to Bamazon! What is the id of the product you would like to buy?",
+      validate: function (value) {
+        if (isNaN(value) === false) {
+          return true;
+        }
+        console.log("Please enter a item ID!");
+        return false;
+      }
     },
     {
       name: "stock",
       type: "input",
-      message: "Enter the quantity."
+      message: "Enter the quantity.",
+      validate: function (value) {
+        if (isNaN(value) === false) {
+          return true;
+        }
+        console.log("Please enter a item ID!");
+        return false;
+      }
     }
   ]).then(function (answers) {
     //variables that stores user inputs from question prompt
@@ -48,12 +60,14 @@ function productSearch() {
       var query = "SELECT * FROM products WHERE ?";
       var queryUpdate = "UPDATE products SET ? WHERE ?";
       connection.query(query, { item_id: id }, function (err, res) {
+        var price = res[0].price;
         var quantity = res[0].stock_quantity;
         if (quantity >= answers.stock) {
           quantity = quantity - answers.stock;
-          console.log(`There is ${quantity} remaining.`);
-          console.log(`Thanks for purchasing! Your total is...`);
-          connection.query(queryUpdate,[{stock_quantity: quantity},{item_id: id}], function(err) {
+          console.log(`${quantity} remaining.`);
+          var total = (answers.stock * price);
+          console.log(`Thanks for purchasing! Your total is $${total}`);
+          connection.query(queryUpdate, [{ stock_quantity: quantity }, { item_id: id }], function (err) {
             if (err) throw err;
             loadProducts();
           })
@@ -65,30 +79,3 @@ function productSearch() {
     }
   })
 }
-
-
-      // function startingQty() {
-      //   // Selects all of the data from the MySQL products table
-      //   connection.query(`SELECT stock_quantity FROM products WHERE item_id = ${id};`, function(err, res) {
-      //     if (err) throw err;
-      //     console.log(res);
-      //   });
-      // connection.end();
-      // }
-
-
-      //.then function concatenate id and update from mysql workbench
-
-      //get quantity where item_id is equal to user input id
-
-
-      // console.log(id);
-
-
-      //prevent the order from going through error handling if not a number
-      //if the stock quantity is less than 0 insufficient quantity and ask again
-
-      //update the stock quantity This means updating the SQL database to reflect the remaining quantity.
-      //delete quantity from stock_quantity
-
-      //Once the update goes through, show the customer the total cost of their purchase.
