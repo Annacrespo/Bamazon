@@ -2,6 +2,8 @@
 ## Overview
 **A command line interface Amazon-like storefront app that uses _node_ and _MySQL workbench_. The app will take in orders from customers and deplete stock from the store's inventory.**
 
+This products database from MySQL is then populated in the app using a node application as its interface. This application will display all of the items available for sale including ids, names, department, price, and stock quantity.
+
 The app will prompt users with two messages.
 The first should ask them the ID of the product they would like to buy.
 The second message should ask how many units of the product they would like to buy.
